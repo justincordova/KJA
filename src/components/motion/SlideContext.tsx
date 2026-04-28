@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
 import type { MotionValue } from "framer-motion";
+import { createContext, useContext } from "react";
 
 export interface SlideContextValue {
   scrollYProgress: MotionValue<number>;

@@ -7,7 +7,7 @@ export interface ParsedSlide {
 }
 
 function parseDirective(
-  markdown: string,
+  markdown: string
 ): Pick<ParsedSlide, "kind" | "imageUrl" | "objectPosition" | "markdown"> {
   const imageMatch = markdown.match(/^!\[(.*?)\]\((.*?)\)\s*\n?/m);
   if (!imageMatch) {

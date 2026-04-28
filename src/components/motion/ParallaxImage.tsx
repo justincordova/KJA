@@ -1,7 +1,7 @@
 "use client";
 
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 
 export function ParallaxImage({
   src,
@@ -19,7 +19,9 @@ export function ParallaxImage({
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"], {
+    clamp: true,
+  });
 
   return (
     <div
@@ -35,12 +37,14 @@ export function ParallaxImage({
           position: "absolute",
           inset: "-15%",
           y: reduced ? 0 : y,
+          willChange: "transform",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={alt}
+          loading="eager"
           style={{
             width: "100%",
             height: "100%",
@@ -55,7 +59,7 @@ export function ParallaxImage({
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.95) 100%)",
+              "linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.95) 100%)",
           }}
         />
       )}

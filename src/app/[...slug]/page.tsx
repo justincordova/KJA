@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { PageLayoutFactory } from "@/components/layouts/PageLayoutFactory";
 import { getPagesRepo } from "@/lib/content/repository";
 
@@ -24,11 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: string[] }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
   if (!slug?.length) notFound();
   const page = await getPagesRepo().getPageBySlug(slug.join("/"));

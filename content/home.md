@@ -1,23 +1,25 @@
 ---
 title: "Koenigsegg Jesko Absolut"
 layout: "presentation"
-summary: "The fastest car Koenigsegg will ever build. A scrollytelling experience."
+summary: "The fastest car Koenigsegg will ever build."
 seo:
-  title: "Koenigsegg Jesko Absolut — A Scrollytelling Experience"
-  description: "Explore the Koenigsegg Jesko Absolut through an immersive scrollytelling experience. 1,600 HP, 0.278 Cd, the fastest series-production car ever made."
+  title: "Koenigsegg Jesko Absolut"
+  description: "1,600 HP. 0.278 Cd. 1,290 kg. The fastest series-production car ever made."
 ---
 
-![bg](https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80)
+![bg](/images/hero.jpg)
 
 ## Koenigsegg Jesko Absolut
 
 # The Fastest Car They Will Ever Build
 
-A scrollytelling experience exploring the engineering, design, and ambition behind the machine destined to break every speed record.
+1,600 horsepower. 0.278 drag coefficient. 1,290 kilograms dry.
 
-_Scroll to begin._
+The machine destined to break every speed record — and the last of its kind.
 
 ---
+
+![bg](/images/mission.jpg)
 
 ## The Mission
 
@@ -30,6 +32,8 @@ Every surface, every component, every aerodynamic decision was made in service o
 > Time will tell how fast. Looking at the math and our advanced simulations — it will be unbelievably fast.
 
 ---
+
+![bg](/images/wheel.jpg)
 
 ## By The Numbers
 
@@ -49,6 +53,8 @@ Every surface, every component, every aerodynamic decision was made in service o
 
 ---
 
+![bg](/images/heart.png)
+
 ## The Heart
 
 # World's Lightest V8 Crankshaft
@@ -66,7 +72,7 @@ At its heart sits the world's lightest V8 crankshaft, weighing just 12.5 kilogra
 
 ---
 
-![bg](https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=1920&q=80)
+![bg](/images/engine.jpg)
 
 ## Light Speed Transmission
 
@@ -84,6 +90,8 @@ Nine forward gears and multiple wet, multi-disc clutches in a package weighing j
 > UPOD — Ultimate Power On Demand — instantly selects the optimum gear for maximum acceleration regardless of how far away the gear is.
 
 ---
+
+![bg](/images/side-profile.jpg)
 
 ## Aerodynamics
 
@@ -103,7 +111,7 @@ They achieved **0.278 Cd**.
 
 ---
 
-![bg](https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=1920&q=80)
+![bg](/images/rear.jpg)
 
 ## Fighter Jet Philosophy
 
@@ -122,6 +130,8 @@ The rear extension makes it 85 mm longer than the Jesko Attack. Dished rear whee
 
 ---
 
+![bg](/images/chassis.jpg)
+
 ## Chassis
 
 # Carbon Fiber Monocoque
@@ -137,6 +147,8 @@ At the core of the Jesko Absolut is a carbon fiber monocoque with aluminum honey
 > The suspension is tuned for extreme high speeds rather than track downforce — softer, more stable, more comfortable at velocity.
 
 ---
+
+![bg](/images/innovation.jpg)
 
 ## Innovation
 
@@ -155,7 +167,7 @@ The Jesko Absolut carries innovations that extend far beyond engine and transmis
 
 ---
 
-![bg](https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80)
+![bg](/images/interior.jpg)
 
 ## The Record
 
@@ -174,6 +186,8 @@ With 1,600 horsepower, a drag coefficient of just 0.278, a frontal area of 1.88 
 
 ---
 
+![bg](/images/legacy.jpg)
+
 ## The Legacy
 
 # 125 Units. No More.
@@ -185,6 +199,8 @@ This is not a car that will be iterated upon. There will be no Jesko Absolut 2.0
 > The Jesko Absolut is the statement. Not the beginning of a new chapter — the final word.
 
 ---
+
+![bg](/images/company.jpg)
 
 ## Built By
 
@@ -198,14 +214,14 @@ The Jesko Absolut is the latest chapter in that story — and perhaps the most a
 
 ---
 
+![bg](/images/closing.jpg)
+
 ## Explore More
 
-# Thank You for Scrolling
-
-This scrollytelling experience was built using a spec-driven development process, leveraging Next.js, Framer Motion, and Markdown-driven content.
+# The Story Continues
 
 - [Koenigsegg Official Site](https://www.koenigsegg.com/model/jesko-absolut)
 - [Technical Specifications](https://www.koenigsegg.com/technical-specifications-jesko-absolut)
 - [About This Project](/about)
 
-> Built by Justin Cordova as a scrollytelling web design project. Inspired by the Apple-style narrative scroll experience.
+> Built by [Justin Cordova](https://www.justincordova.dev/).

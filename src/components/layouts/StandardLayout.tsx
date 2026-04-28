@@ -1,5 +1,5 @@
-import type { PageData } from "@/lib/content/repository";
 import { MarkdownRenderer } from "@/components/markdown/MarkdownRenderer";
+import type { PageData } from "@/lib/content/repository";
 
 export function StandardLayout({ page }: { page: PageData }) {
   return (

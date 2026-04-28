@@ -3,29 +3,16 @@ import { Reveal } from "@/components/motion/Reveal";
 
 function renderMarkdownLine(line: string): ReactNode {
   if (line.startsWith("# "))
-    return (
-      <h1 className="mb-4 text-4xl font-bold tracking-tight">{line.slice(2)}</h1>
-    );
+    return <h1 className="mb-4 text-4xl font-bold tracking-tight">{line.slice(2)}</h1>;
   if (line.startsWith("## "))
-    return (
-      <h2 className="mb-3 mt-10 text-2xl font-semibold tracking-tight">
-        {line.slice(3)}
-      </h2>
-    );
+    return <h2 className="mb-3 mt-10 text-2xl font-semibold tracking-tight">{line.slice(3)}</h2>;
   if (line.startsWith("### "))
-    return (
-      <h3 className="mb-2 mt-8 text-xl font-semibold">{line.slice(4)}</h3>
-    );
-  if (line.startsWith("- "))
-    return <li className="text-white/75">{line.slice(2)}</li>;
+    return <h3 className="mb-2 mt-8 text-xl font-semibold">{line.slice(4)}</h3>;
+  if (line.startsWith("- ")) return <li className="text-white/75">{line.slice(2)}</li>;
   return <p className="mb-4 leading-7 text-white/70">{line}</p>;
 }
 
-export function MarkdownRenderer({
-  children,
-}: {
-  children: string | ReactNode;
-}) {
+export function MarkdownRenderer({ children }: { children: string | ReactNode }) {
   if (typeof children !== "string") {
     return <div className="prose prose-invert max-w-none">{children}</div>;
   }
@@ -48,7 +35,7 @@ export function MarkdownRenderer({
                 <li key={li}>{line.slice(2)}</li>
               ))}
             </ul>
-          </Reveal>,
+          </Reveal>
         );
         return;
       }
@@ -57,11 +44,9 @@ export function MarkdownRenderer({
     output.push(
       <Reveal key={index}>
         <div>{renderMarkdownLine(block)}</div>
-      </Reveal>,
+      </Reveal>
     );
   });
 
-  return (
-    <div className="prose prose-invert max-w-none">{output}</div>
-  );
+  return <div className="prose prose-invert max-w-none">{output}</div>;
 }

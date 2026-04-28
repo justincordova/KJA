@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
-import { PageFrontmatterSchema, type PageFrontmatter } from "./schema";
+import { type PageFrontmatter, PageFrontmatterSchema } from "./schema";
 
 export interface PageData {
   slug: string;
@@ -12,7 +12,7 @@ export interface PageData {
 export class ContentValidationError extends Error {
   constructor(
     public filePath: string,
-    public issues: string[],
+    public issues: string[]
   ) {
     super(`Invalid content in ${filePath}\n${issues.join("\n")}`);
   }
@@ -23,10 +23,9 @@ export class ContentRepository {
 
   async getPageBySlug(slug: string): Promise<PageData> {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-      throw new ContentValidationError(
-        path.join(this.baseDir, `${slug}.md`),
-        ["slug: must be kebab-case"],
-      );
+      throw new ContentValidationError(path.join(this.baseDir, `${slug}.md`), [
+        "slug: must be kebab-case",
+      ]);
     }
 
     const filePath = path.join(this.baseDir, `${slug}.md`);
@@ -36,7 +35,7 @@ export class ContentRepository {
     if (!result.success) {
       throw new ContentValidationError(
         filePath,
-        result.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`),
+        result.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`)
       );
     }
     return { slug, frontmatter: result.data, content: parsed.content };
@@ -56,7 +55,5 @@ export class ContentRepository {
   }
 }
 
-export const getHomeRepo = () =>
-  new ContentRepository(path.join(process.cwd(), "content"));
-export const getPagesRepo = () =>
-  new ContentRepository(path.join(process.cwd(), "content/pages"));
+export const getHomeRepo = () => new ContentRepository(path.join(process.cwd(), "content"));
+export const getPagesRepo = () => new ContentRepository(path.join(process.cwd(), "content/pages"));

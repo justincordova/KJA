@@ -1,6 +1,6 @@
-import { getHomeRepo } from "@/lib/content/repository";
-import { PageLayoutFactory } from "@/components/layouts/PageLayoutFactory";
 import type { Metadata } from "next";
+import { PageLayoutFactory } from "@/components/layouts/PageLayoutFactory";
+import { getHomeRepo } from "@/lib/content/repository";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getHomeRepo().getPageBySlug("home");

@@ -1,28 +1,51 @@
 "use client";
 
-import type { PageData } from "@/lib/content/repository";
-import { splitMarkdownIntoSlides, type ParsedSlide } from "@/lib/content/parser";
-import { PresentationSlide } from "@/components/motion/PresentationSlide";
-import { Reveal } from "@/components/motion/Reveal";
+import { KeyboardScroll } from "@/components/motion/KeyboardScroll";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";
 import { PresentationProgress } from "@/components/motion/PresentationProgress";
+import { Reveal } from "@/components/motion/Reveal";
+import { type ParsedSlide, splitMarkdownIntoSlides } from "@/lib/content/parser";
+import type { PageData } from "@/lib/content/repository";
+
+function parseInlineLinks(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  let last = 0;
+  const re = /\[(.+?)\]\((.+?)\)/g;
+  for (const m of text.matchAll(re)) {
+    if (m.index != null && m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(
+      <a
+        key={m.index}
+        href={m[2]}
+        target={m[2].startsWith("http") ? "_blank" : undefined}
+        rel={m[2].startsWith("http") ? "noopener noreferrer" : undefined}
+        className="slide-link"
+      >
+        {m[1]}
+      </a>
+    );
+    last = (m.index ?? 0) + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
     <div
       style={{
         background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(200,169,126,0.2)",
+        border: "1px solid rgba(125,211,252,0.15)",
         borderRadius: "12px",
         padding: "1.5rem",
         textAlign: "center",
       }}
     >
       <div
+        className="stat-value"
         style={{
           fontSize: "clamp(2rem, 5vw, 3.5rem)",
           fontWeight: 700,
-          color: "#c8a97e",
           lineHeight: 1.1,
         }}
       >
@@ -56,19 +79,19 @@ function renderStatGrid(source: string) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(auto-fit, minmax(180px, 1fr))`,
+        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
         gap: "1rem",
         width: "100%",
       }}
     >
       {rows.map(([value, label], i) => (
-        <StatCard key={i} value={value} label={label} />
+        <StatCard key={value ?? i} value={value} label={label} />
       ))}
     </div>
   );
 }
 
-function SlideContent({ slide }: { slide: ParsedSlide }) {
+function SlideContent({ slide, slideIndex }: { slide: ParsedSlide; slideIndex: number }) {
   const lines = slide.markdown.split("\n").filter(Boolean);
   const elements: React.ReactNode[] = [];
 
@@ -87,7 +110,7 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
       elements.push(
         <Reveal key={elements.length} delay={0.2}>
           {renderStatGrid(gridLines.join("\n"))}
-        </Reveal>,
+        </Reveal>
       );
       continue;
     }
@@ -106,16 +129,17 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
           >
             {line.slice(2)}
           </h1>
-        </Reveal>,
+        </Reveal>
       );
     } else if (line.startsWith("## ")) {
+      const isHero = slideIndex === 0;
       elements.push(
         <Reveal key={elements.length}>
           <h2
+            className={isHero ? "hero-title" : "slide-subtitle"}
             style={{
               fontSize: "clamp(1.25rem, 3vw, 2rem)",
               fontWeight: 300,
-              color: "#c8a97e",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               margin: 0,
@@ -123,7 +147,7 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
           >
             {line.slice(3)}
           </h2>
-        </Reveal>,
+        </Reveal>
       );
     } else if (line.startsWith("### ")) {
       elements.push(
@@ -138,7 +162,7 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
           >
             {line.slice(4)}
           </h3>
-        </Reveal>,
+        </Reveal>
       );
     } else if (line.startsWith("- ")) {
       const items: string[] = [];
@@ -157,39 +181,55 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
               gap: "0.75rem",
             }}
           >
-            {items.map((item, j) => (
-              <li
-                key={j}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "0.75rem",
-                  color: "rgba(245,245,240,0.8)",
-                  lineHeight: 1.6,
-                }}
-              >
-                <span
+            {items.map((item, j) => {
+              const linkMatch = item.match(/^\[(.+?)\]\((.+?)\)$/);
+              return (
+                <li
+                  key={j}
                   style={{
-                    color: "#c8a97e",
-                    marginTop: "0.35em",
-                    fontSize: "0.5rem",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.75rem",
+                    color: "rgba(245,245,240,0.8)",
+                    lineHeight: 1.6,
                   }}
                 >
-                  &#9670;
-                </span>
-                {item}
-              </li>
-            ))}
+                  <span
+                    style={{
+                      color: "var(--primary)",
+                      marginTop: "0.35em",
+                      fontSize: "0.5rem",
+                    }}
+                  >
+                    &#9670;
+                  </span>
+                  {linkMatch ? (
+                    <a
+                      href={linkMatch[2]}
+                      target={linkMatch[2].startsWith("http") ? "_blank" : undefined}
+                      rel={linkMatch[2].startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="slide-link"
+                    >
+                      {linkMatch[1]}
+                    </a>
+                  ) : (
+                    item
+                  )}
+                </li>
+              );
+            })}
           </ul>
-        </Reveal>,
+        </Reveal>
       );
       continue;
     } else if (line.startsWith("> ")) {
+      const text = line.slice(2);
+      const linkParts = parseInlineLinks(text);
       elements.push(
         <Reveal key={elements.length} delay={0.15}>
           <blockquote
+            className="slide-blockquote"
             style={{
-              borderLeft: "3px solid #c8a97e",
               paddingLeft: "1.25rem",
               margin: "1rem 0",
               fontStyle: "italic",
@@ -197,9 +237,9 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
               lineHeight: 1.7,
             }}
           >
-            {line.slice(2)}
+            {linkParts}
           </blockquote>
-        </Reveal>,
+        </Reveal>
       );
     } else {
       elements.push(
@@ -214,7 +254,7 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
           >
             {line}
           </p>
-        </Reveal>,
+        </Reveal>
       );
     }
     i++;
@@ -225,39 +265,38 @@ function SlideContent({ slide }: { slide: ParsedSlide }) {
 
 function Slide({ slide, index }: { slide: ParsedSlide; index: number }) {
   const hasBg = slide.kind === "bg" && slide.imageUrl;
-  const height = hasBg ? "200vh" : "170vh";
 
   return (
-    <PresentationSlide index={index} height={height}>
-      <div data-slide={index} id={`slide-${index}`} style={{ height: "100%" }}>
-        {hasBg && (
-          <ParallaxImage src={slide.imageUrl!} alt={`Slide ${index} background`} />
-        )}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: "800px",
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.5rem",
-            }}
-          >
-            <SlideContent slide={slide} />
-          </div>
-        </div>
+    <section
+      data-slide={index}
+      id={`slide-${index}`}
+      style={{
+        position: "relative",
+        zIndex: index,
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+        scrollSnapAlign: "start",
+      }}
+    >
+      {hasBg && slide.imageUrl && <ParallaxImage src={slide.imageUrl} alt="" />}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: "800px",
+          width: "100%",
+          padding: "4rem 2rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.5rem",
+        }}
+      >
+        <SlideContent slide={slide} slideIndex={index} />
       </div>
-    </PresentationSlide>
+    </section>
   );
 }
 
@@ -266,6 +305,7 @@ export function PresentationLayout({ page }: { page: PageData }) {
 
   return (
     <main>
+      <KeyboardScroll total={slides.length} />
       <PresentationProgress total={slides.length} />
       {slides.map((slide, index) => (
         <Slide key={index} slide={slide} index={index} />
@@ -279,7 +319,7 @@ export function PresentationLayout({ page }: { page: PageData }) {
           borderTop: "1px solid rgba(200,169,126,0.1)",
         }}
       >
-        Koenigsegg Jesko Absolut &mdash; A Scrollytelling Experience
+        Koenigsegg Jesko Absolut
       </footer>
     </main>
   );

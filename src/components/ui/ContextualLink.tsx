@@ -1,13 +1,7 @@
 import Link from "next/link";
 import { basePath } from "@/lib/site-config";
 
-export function ContextualLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
+export function ContextualLink({ href, children }: { href: string; children: React.ReactNode }) {
   if (href.startsWith("http://") || href.startsWith("https://")) {
     return (
       <a

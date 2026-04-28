@@ -37,7 +37,7 @@ export function PresentationProgress({ total }: { total: number }) {
         zIndex: 50,
         display: "flex",
         flexDirection: "column",
-        gap: "0.625rem",
+        gap: "0.5rem",
       }}
     >
       {Array.from({ length: total }, (_, i) => (
@@ -46,20 +46,25 @@ export function PresentationProgress({ total }: { total: number }) {
           href={`#slide-${i}`}
           onClick={(e) => {
             e.preventDefault();
-            document
-              .querySelector(`[data-slide="${i}"]`)
-              ?.scrollIntoView({ behavior: "smooth" });
+            document.querySelector(`[data-slide="${i}"]`)?.scrollIntoView({ behavior: "smooth" });
           }}
           style={{
-            width: active === i ? "10px" : "6px",
-            height: active === i ? "10px" : "6px",
-            borderRadius: "50%",
-            background:
-              active === i
-                ? "var(--accent, #c8a97e)"
-                : "rgba(245,245,240,0.3)",
-            transition: "all 0.3s ease",
             display: "block",
+            width: active === i ? "7px" : "5px",
+            height: active === i ? "7px" : "5px",
+            borderRadius: "50%",
+            background: active === i ? "var(--primary)" : "rgba(245,245,240,0.15)",
+            transition: "transform 0.15s ease, background 0.15s ease",
+            cursor: "pointer",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "scale(1.8)";
+            e.currentTarget.style.background = "var(--primary)";
+          }}
+          onMouseLeave={(e) => {
+            const isActive = active === i;
+            e.currentTarget.style.transform = "scale(1)";
+            e.currentTarget.style.background = isActive ? "var(--primary)" : "rgba(245,245,240,0.15)";
           }}
           aria-label={`Go to slide ${i + 1}`}
         />
