@@ -6,6 +6,7 @@ import { PresentationProgress } from "@/components/motion/PresentationProgress";
 import { Reveal } from "@/components/motion/Reveal";
 import { type ParsedSlide, splitMarkdownIntoSlides } from "@/lib/content/parser";
 import type { PageData } from "@/lib/content/repository";
+import { url } from "@/lib/site-config";
 
 function parseInlineLinks(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
@@ -281,7 +282,7 @@ function Slide({ slide, index }: { slide: ParsedSlide; index: number }) {
         scrollSnapAlign: "start",
       }}
     >
-      {hasBg && slide.imageUrl && <ParallaxImage src={slide.imageUrl} alt="" />}
+      {hasBg && slide.imageUrl && <ParallaxImage src={url(slide.imageUrl)} alt="" />}
       <div
         style={{
           position: "relative",
