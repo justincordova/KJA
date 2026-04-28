@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ScrollRestoration } from "@/components/motion/ScrollRestoration";
+import { url } from "@/lib/site-config";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "Koenigsegg Jesko Absolut — 1,600 HP, 0.278 Cd. The fastest car Koenigsegg will ever build.",
   icons: {
-    icon: "/favicon.svg",
+    icon: url("/favicon.svg"),
   },
 };
 
