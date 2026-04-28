@@ -119,3 +119,10 @@ body {
   opacity: 0.8;
   text-shadow: 0 0 20px rgba(125, 211, 252, 0.4);
 }
+
+.slide-link + strong,
+p strong,
+li strong {
+  color: rgba(245, 245, 240, 0.85);
+  font-weight: 600;
+}

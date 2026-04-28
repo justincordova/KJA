@@ -11,20 +11,27 @@ import { url } from "@/lib/site-config";
 function parseInlineLinks(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   let last = 0;
-  const re = /\[(.+?)\]\((.+?)\)/g;
-  for (const m of text.matchAll(re)) {
+  const combined = /(\*\*[^*]+\*\*)|(\[.+?\]\(.+?\))/g;
+  for (const m of text.matchAll(combined)) {
     if (m.index != null && m.index > last) parts.push(text.slice(last, m.index));
-    parts.push(
-      <a
-        key={m.index}
-        href={m[2]}
-        target={m[2].startsWith("http") ? "_blank" : undefined}
-        rel={m[2].startsWith("http") ? "noopener noreferrer" : undefined}
-        className="slide-link"
-      >
-        {m[1]}
-      </a>
-    );
+    if (m[1]) {
+      parts.push(<strong key={m.index}>{m[1].slice(2, -2)}</strong>);
+    } else if (m[2]) {
+      const linkMatch = m[2].match(/\[(.+?)\]\((.+?)\)/);
+      if (linkMatch) {
+        parts.push(
+          <a
+            key={m.index}
+            href={linkMatch[2]}
+            target={linkMatch[2].startsWith("http") ? "_blank" : undefined}
+            rel={linkMatch[2].startsWith("http") ? "noopener noreferrer" : undefined}
+            className="slide-link"
+          >
+            {linkMatch[1]}
+          </a>
+        );
+      }
+    }
     last = (m.index ?? 0) + m[0].length;
   }
   if (last < text.length) parts.push(text.slice(last));
@@ -89,6 +96,40 @@ function renderStatGrid(source: string) {
         <StatCard key={value ?? i} value={value} label={label} />
       ))}
     </div>
+  );
+}
+
+function HeroStats({ text }: { text: string }) {
+  const hp = text.match(/([\d,]+)\s*(?:horsepower|hp)/i)?.[1] ?? "";
+  const cd = text.match(/([\d.]+)\s*drag\s*coefficient/i)?.[1] ?? "";
+  const kg = text.match(/([\d,]+)\s*kilograms?\s*dry/i)?.[1] ?? "";
+
+  const items = [
+    hp && { value: hp, label: "horsepower" },
+    cd && { value: cd, label: "drag coefficient" },
+    kg && { value: `${kg} kg`, label: "dry weight" },
+  ].filter(Boolean) as { value: string; label: string }[];
+
+  return (
+    <p
+      style={{
+        color: "rgba(245,245,240,0.45)",
+        fontSize: "clamp(0.8rem, 1.2vw, 0.95rem)",
+        fontWeight: 400,
+        lineHeight: 1.8,
+        letterSpacing: "0.02em",
+        margin: 0,
+      }}
+    >
+      {items.map((item, i) => (
+        <span key={item.label}>
+          {i > 0 && " · "}
+          <span style={{ color: "rgba(245,245,240,0.7)", fontWeight: 500 }}>{item.value}</span>
+          {" "}
+          <span style={{ color: "rgba(245,245,240,0.35)" }}>{item.label}</span>
+        </span>
+      ))}
+    </p>
   );
 }
 
@@ -214,7 +255,7 @@ function SlideContent({ slide, slideIndex }: { slide: ParsedSlide; slideIndex: n
                       {linkMatch[1]}
                     </a>
                   ) : (
-                    item
+                    parseInlineLinks(item)
                   )}
                 </li>
               );
@@ -242,6 +283,12 @@ function SlideContent({ slide, slideIndex }: { slide: ParsedSlide; slideIndex: n
           </blockquote>
         </Reveal>
       );
+    } else if (
+      /^\d[\d,]*\s*(horsepower|hp)/i.test(line) ||
+      /\.\d+\s*drag\s*coefficient/i.test(line) ||
+      /\d[\d,]*\s*kilograms?\s*dry/i.test(line)
+    ) {
+      elements.push(<HeroStats key={elements.length} text={line} />);
     } else {
       elements.push(
         <Reveal key={elements.length} delay={0.05}>
